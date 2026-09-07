@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# image-upload-handler-for-supabase-and-nextjs
+
+A simple reusable image upload component and handler for supabase and nextjs with drag and drop and keyboard accessibility features.
+
+https://github.com/user-attachments/assets/95f5a1f8-ee74-4e93-80a0-93dcf6e0683f
+
+Supported stacks:
+
+- Supabase with Nextjs, Tailwind, shadcn/ui, React Hook Form and Zod
+
+See the [Examples](#-examples) section below for more demos.
 
 ## Getting Started
 
-First, run the development server:
+Currently this project works for Nextjs and supabase but I believe it will work fine with React too with simple modifications.
 
 ```bash
+git clone https://github.com/theeyad/image-upload-handler-for-supabase-and-nextjs.git
+
+cd image-upload-handler-for-supabase-and-nextjs
+
+npm install
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Open http://localhost:3000 with your browser to see the result.
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Now let's take a look at this
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+image-upload-handler-for-supabase-and-nextjs/
+├── src/
+│   ├── actions/
+│   │   └── admin.ts                # Server action to create category and add it to Supabase
+│   ├── app/                        # Next.js App Router layout, page & global CSS
+│   ├── components/
+│   │   ├── shared/
+│   │   │   ├── ImageUploader.tsx   # The main UI component
+│   │   │   └── NewCategoryForm.tsx # Full Form Demo Component
+│   │   └── ui/                     # shadcn/ui components (button, field, label, toast, etc.)
+│   ├── lib/
+│   │   ├── supabase/
+│   │   │   ├── client.ts           # Browser Supabase client helper
+│   │   │   └── server.ts           # Server Supabase client helper
+│   │   ├── validation/
+│   │   │   └── categories/
+│   │   │       └── createCat.ts    # Zod schema
+│   │   ├── upload.ts               # Storage upload helper function
+│   │   └── utils.ts                # cn() & generateUniqueId() helpers
+│   └── supabase/
+│       └── storage-policies.sql    # Storage bucket & RLS SQL setup script
+├── next.config.ts                  # remotePatterns config example
+└── README.md                       # Full documentation & RHF + Zod examples
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Here we have the simplest implementation of our image upload handler, in `src/components/shared/NewCategoryForm.tsx` you will find a full form using shadcn/ui and our `ImageUploader.tsx`
 
-## Learn More
+## Examples
 
-To learn more about Next.js, take a look at the following resources:
+**Normal Upload**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+https://github.com/user-attachments/assets/1e75f752-14d7-4853-80cd-1a7b16f5880f
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Drag & Drop**
 
-## Deploy on Vercel
+https://github.com/user-attachments/assets/b6fb9d68-7a60-4d30-87e8-5afd4baa1745
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Keyboard Accessibility**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+https://github.com/user-attachments/assets/b48be578-3cfa-46f0-ab5a-898636f96f23
+
+## Notes on Usage
+
+> This demo will not function untill `.env.example` is provided with real values. and supabase storage bucket is created and RLS policies are enabled on that bucket.
+
+Follow these steps:
+
+1. first you need a storage bucket in supabase and RLS policies enabled on that bucket.
+
+2. then you can use the `ImageUploader.tsx` component in your project with the props: `value`, `onChange`, `onError`, `bucket`, `folder`, `disabled`. those props are connected to react hook form (RHF) and supabase bucket.
+
+3. `ImageUploader.tsx` uses the `upload.ts` helper function to upload images to supabase.
+
+4. the `createCat.ts` schema is used in `NewCategoryForm.tsx` to validate images.
+
+5. `admin.ts` server action is used to create categories and add them to supabase.
+
+6. `generateUniqueId()` helper function is used to generate unique ids.
+
+7. `app/page.tsx` uses `NewCategoryForm.tsx` component to display a full form using shadcn/ui and our `ImageUploader.tsx`.
+
+8. `next.config.ts` remotePatterns config example to configure remote patterns for images, this is needed for next `<Image>` component so it can display the preview of uploaded image.
+
+## License
+
+MIT License — Feel free to use, modify, and distribute in your own projects!
