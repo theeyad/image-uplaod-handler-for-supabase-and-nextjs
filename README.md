@@ -14,7 +14,7 @@ See the [Examples](#-examples) section below for more demos.
 
 ## Getting Started
 
-Currently this project works for Nextjs and supabase but I believe it will work fine with React too with simple modifications.
+Currently this project works for Nextjs and supabase but I believe it will work fine with React too with simple modifications and actually with any file type not just images.
 
 ```bash
 git clone https://github.com/theeyad/image-upload-handler-for-supabase-and-nextjs.git
