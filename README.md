@@ -4,7 +4,7 @@ A simple reusable image upload component and handler for supabase and nextjs wit
 
 > NOTE: all 4 demo videos in _Examples_ are from a web app I worked on so you can see all features (more in that in the _Notes on Usage_ section below). the video below is what you actually will see
 
-https://github.com/user-attachments/assets/95f5a1f8-ee74-4e93-80a0-93dcf6e0683f
+https://github.com/user-attachments/assets/4c2feeda-efd9-4575-9e88-109a0c7f6d1f
 
 Supported stacks:
 
@@ -57,15 +57,15 @@ Here we have the simplest implementation of our image upload handler, in `src/co
 
 **Normal Upload**
 
-https://github.com/user-attachments/assets/1e75f752-14d7-4853-80cd-1a7b16f5880f
+https://github.com/user-attachments/assets/5db89a70-b32a-40fe-850e-ffc5a5a18013
 
 **Drag & Drop**
 
-https://github.com/user-attachments/assets/b6fb9d68-7a60-4d30-87e8-5afd4baa1745
+https://github.com/user-attachments/assets/87e52d77-c733-4421-abe7-3cd2f3c6e96f
 
 **Keyboard Accessibility**
 
-https://github.com/user-attachments/assets/b48be578-3cfa-46f0-ab5a-898636f96f23
+https://github.com/user-attachments/assets/bd643272-1009-4959-a6ff-b61cdaedaaa4
 
 ## Notes on Usage
 
