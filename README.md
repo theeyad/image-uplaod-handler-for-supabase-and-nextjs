@@ -2,6 +2,8 @@
 
 A simple reusable image upload component and handler for supabase and nextjs with drag and drop and keyboard accessibility features.
 
+> NOTE: all 4 demo videos in _Examples_ are from a web app I worked on so you can see all features (more in that in the _Notes on Usage_ section below). the video below is what you actually will see
+
 https://github.com/user-attachments/assets/95f5a1f8-ee74-4e93-80a0-93dcf6e0683f
 
 Supported stacks:
@@ -16,14 +18,9 @@ Currently this project works for Nextjs and supabase but I believe it will work 
 
 ```bash
 git clone https://github.com/theeyad/image-upload-handler-for-supabase-and-nextjs.git
-
 cd image-upload-handler-for-supabase-and-nextjs
-
 npm install
-
 npm run dev
-
-# Open http://localhost:3000 with your browser to see the result.
 ```
 
 Now let's take a look at this
@@ -91,6 +88,8 @@ Follow these steps:
 7. `app/page.tsx` uses `NewCategoryForm.tsx` component to display a full form using shadcn/ui and our `ImageUploader.tsx`.
 
 8. `next.config.ts` remotePatterns config example to configure remote patterns for images, this is needed for next `<Image>` component so it can display the preview of uploaded image.
+
+> To use the `ImageUploader` component and understand the whole flow see [Full Documentation](Documentation.md).
 
 ## License
 

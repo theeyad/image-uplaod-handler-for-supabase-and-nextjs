@@ -1,3 +1,78 @@
+# Full Documentation
+
+Now after you created your supabase bucket and enabled rls policies on it, you can use this component by simply installing these dependencies:
+
+##### Install dependencies
+
+```text
+npm install lucide-react tailwind-merge clsx
+```
+
+and creating these 3 files:
+
+#### `lib/utils.ts`
+
+```typescript
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+// Utility function to merge class names with Tailwind
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+// Utility function to generate a unique ID
+export function generateUniqueId(prefix = "id") {
+  return `${prefix}-${Math.random().toString(36).substring(2, 9)}`;
+}
+```
+
+---
+
+#### `lib/uploads.ts`
+
+```typescript
+// your supabase client
+import { createClient } from "@/lib/supabase/client";
+import { generateUniqueId } from "@/lib/utils";
+
+export async function uploadStorageImage(
+  file: File,
+  bucket: string, // bucket name
+  folder: string, // folder name inside that bucket
+) {
+  // Use your supabase client not server so that the upload
+  // is done on the client side.
+  const supabase = createClient();
+
+  // Split file name to get extension.
+  const fileExt = file.name.split(".").pop();
+
+  // Generate unique filename to avoid storage path collisions.
+  const fileName = `${generateUniqueId(Date.now().toString())}.${fileExt}`;
+
+  // Create file path with folder name and unique filename.
+  const filePath = `${folder}/${fileName}`;
+
+  // Store the file in the bucket ('uploads') and folder ('images') so
+  // that everything is organized in folders and all are in the same bucket.
+  const { error } = await supabase.storage.from(bucket).upload(filePath, file);
+  if (error) return { error: error.message };
+
+  // Get public URL of the uploaded file so we can add it to our supabase table.
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(bucket).getPublicUrl(filePath);
+
+  return { publicUrl };
+}
+```
+
+---
+
+#### `components/shared/ImageUploader.tsx`
+
+```typescript
 "use client";
 
 import { useState, useRef } from "react";
@@ -175,3 +250,51 @@ export function ImageUploader({
     </div>
   );
 }
+```
+
+---
+
+now you can use the component and connect it to react hook form like in this example:
+
+```typescript
+<ImageUploader
+    value={watch("cat_img")}
+    onChange={(url) =>
+        setValue("cat_img", url, { shouldValidate: true })
+    }
+    onError={(message) => setError("cat_img", { message })}
+    bucket="uploads"
+    folder="images"
+    disabled={isSubmitting}
+/>
+```
+
+let's breakdown each prop:
+
+- `value`
+The current image URL (string). It uses RHF watch() to see if input has with register "cat_img" got any images uploaded to it or not. If a URL string exists, ImageUploader shows the image preview. If empty `("")`, it shows the upload dropzone.
+
+- `onChange`
+Callback function triggered when an image is uploaded or removed.
+On successful upload: returns the Supabase public URL.
+On removal (clicking `X`): returns an empty string `""`.
+`setValue("cat_img", url, { shouldValidate: true })` updates RHF form state and triggers validation immediately.
+
+- `onError`
+Callback triggered when an error occurs during selection or upload (e.g., non-image file selected or Supabase upload failure). `setError("cat_img", { message })` sets a field-level error in React Hook Form so UI error message displays below the field.
+
+- `bucket` (Optional — defaults to "uploads")
+Supabase Storage bucket name (e.g., 'uploads').
+
+- `folder` (Optional — defaults to "images")
+The subfolder path inside the bucket (e.g., 'categories', 'avatars', 'products') to organize files without creating separate buckets.
+
+- `disabled` (Optional — defaults to false)
+Accepts a boolean (like RHF's isSubmitting). When true, it disables file picking, drag-and-drop, and the remove button so users cannot upload or delete images while the form is submitting.
+
+
+> **NOTE**: `ImageUploader` is a standard controlled React component. While I prefered to use React Hook Form (`watch`, `setValue`, `setError`, `isSubmitting`) in my examples, `ImageUploader` works equally well with standard React useState (`const [url, setUrl] = useState('')`).
+
+---
+
+For detailed example of usage with real form see `NewCategoryForm.tsx` in the root of this repo, and `admin.ts` in `src/actions` folder.

@@ -107,8 +107,8 @@ export default function NewCategoryForm() {
                   setValue("cat_img", url, { shouldValidate: true })
                 }
                 onError={(message) => setError("cat_img", { message })}
-                bucket="categories"
-                folder="categories"
+                bucket="uploads"
+                folder="images"
                 disabled={isSubmitting}
               />
 
